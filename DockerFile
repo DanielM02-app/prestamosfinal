@@ -1,0 +1,39 @@
+# Usa una imagen de PHP con extensiones necesarias para Laravel
+FROM php:8.2-fpm
+
+# Instala dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    unzip \
+    git \
+    curl \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql
+
+# Instala Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Instala Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Crea el directorio de la aplicación
+WORKDIR /var/www
+
+# Copia los archivos del proyecto
+COPY . .
+
+# Instala dependencias de Laravel
+RUN composer install --no-dev --optimize-autoloader
+RUN npm install && npm run build
+
+# Da permisos a la carpeta storage y bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Expone el puerto
+EXPOSE 9000
+
+# Comando de inicio
+CMD ["php-fpm"]
