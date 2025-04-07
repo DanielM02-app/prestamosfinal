@@ -24,6 +24,7 @@ Route::get("/empleados",[CatalogosController::class, "empleadosGet"]);
 Route::get("/empleados/agregar", [CatalogosController::class, "empleadosAgregarGet"]);
 Route::post("/empleados/agregar", [CatalogosController::class, "empleadosAgregarPost"]);
 Route::get("/empleados/{id}/puestos", [CatalogosController::class, "empleadosPuestosGet"])->where("id","[0-9]+");
+Route::get("/empleados/{id}/prestamos",[MovimientosController::class,"empleadosPrestamosGet"])->where("id","[0-9]+");
 Route::get("/empleados/{id}/puestos/cambiar", [CatalogosController::class, "empleadosPuestosCambiarGet"])->where("id","[0-9]+");
 Route::post("/empleados/{id}/puestos/cambiar", [CatalogosController::class, "empleadosPuestosCambiarPost"])->where("id","[0-9]+");
 Route::get("/movimientos/prestamos",[MovimientosController::class, "prestamosGet"]);

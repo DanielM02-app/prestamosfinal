@@ -151,6 +151,5 @@ class CatalogosController extends Controller
         ]);
         $puesto->save();
         return redirect("/empleados/{$id_empleado}/puestos");
-    }      
-
+    }
 }

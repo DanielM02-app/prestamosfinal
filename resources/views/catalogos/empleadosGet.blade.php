@@ -30,7 +30,7 @@
         <td class="text-center">{{$empleado->activo}}</td>
         <td class="text-center">
             <a class="btn btn-primary" href="{{ url('/empleados/'.$empleado->id_empleado.'/puestos') }}">Puestos</a>
-            <a class="btn btn-primary" href="">Prestamos</a>
+            <a class="btn btn-primary" href="{{ url('/empleados/'.$empleado->id_empleado.'/prestamos') }}">Prestamos</a>
         </td>
     </tr>
 @endforeach

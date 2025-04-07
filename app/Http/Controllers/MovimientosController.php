@@ -143,4 +143,19 @@ class MovimientosController extends Controller
             ]
         ]);
     }
+
+    public function empleadosPrestamosGet(Request $request, $id_empleado): View
+    {
+        $empleado=Empleados::find($id_empleado);
+
+        $prestamos=Prestamo::where("prestamo.fk_id_empleado", $id_empleado)->get();
+        return view('movimientos/empleadosPrestamosGet', [
+            "empleado"=>$empleado,
+            'prestamos'=>$prestamos,
+            "breadcrumbs"=>[
+                "Inicio"=>url("/"),
+                "Prestamos"=>url("/movimientos/prestamos")
+            ]
+        ]);
+    }
 }
