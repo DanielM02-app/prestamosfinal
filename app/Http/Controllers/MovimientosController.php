@@ -103,29 +103,19 @@ class MovimientosController extends Controller
     public function abonosAgregarGet($id_prestamo): View
     {
         $prestamo = Prestamo::join("empleados", "empleados.id_empleado", "=", "prestamo.fk_id_empleado")
-            ->where("id_prestamo", $id_prestamo)->first();
+            ->where("id_prestamo", $id_prestamo)
+            ->first();
     
         $abonos = Abonos::where("abonos.fk_id_prestamo", $id_prestamo)->get();
         $num_abono = count($abonos) + 1;
-    
-        // Obtener el último abono registrado
-        $ultimo_abono = Abonos::where("abonos.fk_id_prestamo", $id_prestamo)
-            ->orderBy("fecha", "desc")
-            ->first();
-    
-        // Si hay un abono previo, tomamos su saldo actual, si no, usamos el saldo del préstamo
-        $saldo_actual = $ultimo_abono ? $ultimo_abono->saldo_actual : $prestamo->saldo_actual;
-        
-        // Cálculo basado en el saldo actual correcto
-        $monto_interes = $saldo_actual * ($prestamo->tasa_mensual / 100);
+        $pago_fijo_cap = $prestamo->pago_fijo_cap;
+        $monto_interes = $prestamo->saldo_actual * $prestamo->tasa_mensual / 100;
         $monto_cobrado = $prestamo->pago_fijo_cap + $monto_interes;
-        $saldo_pendiente = $saldo_actual - $prestamo->pago_fijo_cap;
+        $saldo_pendiente = $prestamo->saldo_actual - $prestamo->pago_fijo_cap;
     
         if ($saldo_pendiente < 0) {
-            $pago_fijo_cap = $prestamo->pago_fijo_cap + $saldo_pendiente;
+            $pago_fijo_cap -= $saldo_pendiente;
             $saldo_pendiente = 0;
-        } else {
-            $pago_fijo_cap = $prestamo->pago_fijo_cap;
         }
     
         return view('movimientos/abonosAgregarGet', [
@@ -140,7 +130,7 @@ class MovimientosController extends Controller
                 "Prestamos" => url("/movimientos/prestamos"),
                 "Abonos" => url("/prestamos/{$prestamo->id_prestamo}/abonos"),
                 "Agregar" => "",
-            ]
+            ],
         ]);
     }
 
