@@ -11,7 +11,6 @@
                 <div class="card-body">
                     <form action="{{ route('register') }}" method="POST">
                         @csrf
-
                         <div class="mb-3">
                             <label for="name" class="form-label">Nombre Completo</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required autofocus>

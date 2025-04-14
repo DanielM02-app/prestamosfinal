@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // Muestra el formulario de login
+    // Muestra el formulario de Login
     public function showLoginForm()
     {
         return view('auth.login');
@@ -19,7 +19,7 @@ class LoginController extends Controller
     {
         // Validación de las credenciales
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
@@ -34,7 +34,7 @@ class LoginController extends Controller
         ]);
     }
 
-    // Maneja el logout
+    // Maneja el Log-Out
     public function logout(Request $request)
     {
         // Cierra la sesión del usuario
@@ -44,4 +44,5 @@ class LoginController extends Controller
 
         return redirect('/');
     }
+    // FIN
 }
